@@ -1,0 +1,91 @@
+groups:
+  - name: system_alerts_tuned
+    interval: 30s
+    rules:
+      
+      # TUNED: High CPU - Reduced noise
+      - alert: HighCPUUsage
+        expr: (100 - (avg(rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)) > 85
+        for: 10m
+        labels:
+          severity: warning
+          tuned: "true"
+        annotations:
+          summary: "High CPU usage detected (tuned)"
+          description: "CPU usage is at {{ $value }}% for more than 10 minutes"
+          action: "Check top processes: 'top -o %CPU'"
+
+      # TUNED: High Memory - Increased threshold
+      - alert: HighMemoryUsage
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 90
+        for: 10m
+        labels:
+          severity: warning
+          tuned: "true"
+        annotations:
+          summary: "High memory usage detected (tuned)"
+          description: "Memory usage is at {{ $value }}% for more than 10 minutes"
+          action: "Check memory usage: 'free -h'"
+
+      # TUNED: Disk Space - Added flapping prevention
+      - alert: HighDiskUsage
+        expr: (node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}) * 100 < 10
+        for: 15m
+        labels:
+          severity: warning
+          tuned: "true"
+        annotations:
+          summary: "Low disk space (tuned)"
+          description: "Only {{ $value }}% disk space remaining for 15+ minutes"
+          action: "Check disk usage: 'df -h'"
+
+      # TUNED: Load Average - Dynamic threshold
+      - alert: HighLoadAverage
+        expr: node_load15 > (2 * count(node_cpu_seconds_total{mode="idle"}))
+        for: 10m
+        labels:
+          severity: warning
+          tuned: "true"
+        annotations:
+          summary: "High load average (tuned)"
+          description: "Load average is {{ $value }} (threshold based on CPU cores)"
+          action: "Check system load: 'uptime'"
+
+      # TUNED: Swap Usage - Added flapping prevention
+      - alert: SwapUsageHigh
+        expr: (node_memory_SwapTotal_bytes - node_memory_SwapFree_bytes) / node_memory_SwapTotal_bytes * 100 > 60
+        for: 10m
+        labels:
+          severity: warning
+          tuned: "true"
+        annotations:
+          summary: "High swap usage (tuned)"
+          description: "Swap usage is {{ $value }}% for more than 10 minutes"
+          action: "Check memory pressure: 'vmstat 1 5'"
+
+      # TUNED: Service Down - Kept critical
+      - alert: ServiceDown
+        expr: up{job="prometheus"} == 0
+        for: 2m
+        labels:
+          severity: critical
+          tuned: "true"
+        annotations:
+          summary: "Service is DOWN (critical)"
+          description: "{{ $labels.job }} service has been down for 2 minutes"
+          action: "Immediately check the service: 'sudo systemctl status {{ $labels.job }}'"
+
+      # NEW: Combined Alert
+      - alert: SystemHealthCheck
+        expr: |
+          (100 - (avg(rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)) > 80
+          or
+          (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 85
+        for: 15m
+        labels:
+          severity: warning
+          tuned: "true"
+        annotations:
+          summary: "System health check - multiple issues"
+          description: "System is experiencing high resource usage"
+          action: "Check dashboard for detailed metrics"

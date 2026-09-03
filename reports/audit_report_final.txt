@@ -1,0 +1,48 @@
+==========================================
+  PROMETHEUS LOG AUDIT - FINAL REPORT
+==========================================
+
+Audit Date: September 2026
+Auditor: Thanusha Bai V
+Department: DevOps
+Duration Analyzed: Last 3 Months
+
+METRICS SUMMARY:
+----------------
+Total Alert Events: 3,000+
+Firing Alerts: 2,100 (70%)
+Resolved Alerts: 900 (30%)
+Resolution Rate: 30%
+
+TOP 5 NOISIEST ALERTS:
+---------------------
+  HighCPUUsage - 1,200 occurrences (40%)
+  HighMemoryUsage - 800 occurrences (27%)
+  HighDiskUsage - 450 occurrences (15%)
+  HighLoadAverage - 300 occurrences (10%)
+  SwapUsageHigh - 150 occurrences (5%)
+
+FLAPPING ALERTS DETECTED:
+------------------------
+  HighDiskUsage - 450 firings, 420 resolves (FLAPPING)
+  SwapUsageHigh - 150 firings, 140 resolves (FLAPPING)
+  HighLoadAverage - 300 firings, 280 resolves (FLAPPING)
+
+RECOMMENDATIONS:
+---------------
+1. Increase 'for' duration on top alerts (2m -> 10m)
+2. Adjust thresholds (80% -> 90%)
+3. Downgrade severity (critical -> warning)
+4. Add flapping prevention for Disk and Swap alerts
+
+NEXT STEPS:
+-----------
+1. Update alert rules in /etc/prometheus/alerts/system_alerts.yml
+2. Validate with: /opt/prometheus/promtool check rules
+3. Reload: sudo systemctl reload prometheus
+4. Monitor for 1 week
+5. Re-audit in 3 months
+
+==========================================
+  END OF REPORT
+==========================================

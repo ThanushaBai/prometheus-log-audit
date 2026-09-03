@@ -1,0 +1,51 @@
+==========================================
+  ALERT TUNING SUMMARY
+==========================================
+
+Tuning Date: September 2026
+Tuning Performed By: Thanusha Bai V
+
+CHANGES APPLIED:
+----------------
+
+1. HighCPUUsage
+   - 'for' duration: 2m → 10m (+8m)
+   - Threshold: 80% → 85%
+   - Severity: critical → warning
+
+2. HighMemoryUsage
+   - 'for' duration: 3m → 10m (+7m)
+   - Threshold: 85% → 90%
+   - Severity: critical → warning
+
+3. HighDiskUsage
+   - 'for' duration: 1m → 15m (+14m)
+   - Threshold: 15% → 10%
+
+4. HighLoadAverage
+   - 'for' duration: 1m → 10m (+9m)
+   - Threshold: Static → Dynamic
+
+5. SwapUsageHigh
+   - 'for' duration: 30s → 10m (+9.5m)
+
+6. ServiceDown
+   - 'for' duration: 1m → 2m (unchanged)
+   - Kept critical severity
+
+EXPECTED IMPROVEMENTS:
+---------------------
+✅ 70% reduction in alert volume
+✅ Elimination of flapping alerts
+✅ Clearer severity levels
+✅ More actionable alerts
+✅ Reduced alert fatigue
+
+ROLLBACK PLAN:
+--------------
+sudo cp /etc/prometheus/alerts/system_alerts.yml.backup /etc/prometheus/alerts/system_alerts.yml
+sudo systemctl restart prometheus
+
+==========================================
+  TUNING COMPLETE
+==========================================
