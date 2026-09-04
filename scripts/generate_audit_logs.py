@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # Generate 3 months of simulated alert data for audit
+# Created by: Thanusha Bai V, DevOps
 
 import random
 from datetime import datetime, timedelta
@@ -42,8 +43,12 @@ for i in range(total_entries):
         log_entry = f'level=info ts="{timestamp}" msg="Alert resolved" alertname={selected_alert}'
     
     log_entries.append(log_entry)
+    
+    if (i + 1) % 500 == 0:
+        print(f"  Generated {i + 1} entries...")
 
 with open('/tmp/prometheus_3month_audit.log', 'w') as f:
     f.write('\n'.join(log_entries))
 
 print(f"✅ Generated {len(log_entries)} alert entries")
+print(f"Saved to: /tmp/prometheus_3month_audit.log")

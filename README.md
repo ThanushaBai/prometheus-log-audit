@@ -123,6 +123,35 @@ This project provides a comprehensive audit of Prometheus alerting logs over a 3
 
 ---
 
+#### Validation & Testing (NEW)
+
+| Screenshot | Description |
+|------------|-------------|
+| ![Test Alerts Output](screenshots/test_alerts_output.png) | **Test Script Results** - All 7 tests passed |
+| ![Validate Alerts Output](screenshots/validate_alerts_output.png) | **Promtool Validation** - 6 original + 7 tuned rules valid |
+
+---
+
+#### Original vs Tuned Alerts (NEW)
+
+| Screenshot | Description |
+|------------|-------------|
+| ![Alert Files List](screenshots/alert_files_list.png) | **Alert Files** - original_alerts.yml and tuned_alerts.yml |
+| ![Original Alerts Content](screenshots/original_alerts_content.png) | **Original Alerts** - Noisy alerts before tuning |
+| ![Tuned Alerts Content](screenshots/tuned_alerts_content.png) | **Tuned Alerts** - Optimized alerts after tuning |
+| ![Alert Comparison](screenshots/alert_comparison.png) | **Alert Comparison** - Original vs Tuned |
+
+---
+
+#### Rollback & CI/CD (NEW)
+
+| Screenshot | Description |
+|------------|-------------|
+| ![Rollback Script](screenshots/rollback_script.png) | **Rollback Script** - Automated rollback execution |
+| ![GitHub Workflow](screenshots/github_workflow.png) | **GitHub Actions** - CI/CD workflow for alert validation |
+
+---
+
 ### 📁 Project Structure
 prometheus-log-audit/
 ├── README.md # This file
@@ -134,7 +163,13 @@ prometheus-log-audit/
 │ ├── alert_dashboard.sh # Quick alert status view
 │ ├── generate_load.sh # Generate CPU load for testing
 │ ├── generate_audit_logs.py # Generate 3-month simulated data
-│ └── check_alerts_status.sh # Monitor active alerts
+│ ├── check_alerts_status.sh # Monitor active alerts
+│ ├── test_alerts.sh # Run comprehensive system tests
+│ ├── validate_alerts.sh # Validate alert rules with promtool
+│ └── rollback_alerts.sh # Automated rollback to original alerts
+├── .github/
+│ └── workflows/
+│ └── validate-alerts.yml # GitHub Actions CI/CD workflow
 ├── screenshots/ # All screenshots captured
 │ ├── prometheus_status.png
 │ ├── node_exporter_status.png
@@ -156,14 +191,24 @@ prometheus-log-audit/
 │ ├── ports_status.png
 │ ├── prometheus_graph.png
 │ ├── final_verification_01.png
-│ └── final_verification_02.png
+│ ├── final_verification_02.png
+│ ├── test_alerts_output.png # NEW
+│ ├── validate_alerts_output.png # NEW
+│ ├── alert_files_list.png # NEW
+│ ├── original_alerts_content.png # NEW
+│ ├── tuned_alerts_content.png # NEW
+│ ├── alert_comparison.png # NEW
+│ ├── rollback_script.png # NEW
+│ └── github_workflow.png # NEW
+├── alerts/
+│ ├── original_alerts.yml # Original noisy alerts (reference)
+│ ├── tuned_alerts.yml # Tuned optimized alerts
+│ └── system_alerts.yml # Currently active in Prometheus
 ├── docs/
 │ └── prometheus_log_audit.md # Complete project documentation
-├── reports/
-│ ├── audit_report_final.txt # Complete audit findings
-│ └── tuning_summary.txt # Before/after comparison
-└── alerts/
-└── system_alerts.yml # Tuned alert rules
+└── reports/
+├── audit_report_final.txt # Complete audit findings
+└── tuning_summary.txt # Before/after comparison
 
 text
 
@@ -184,6 +229,12 @@ chmod +x scripts/*.sh
 
 # Check system status
 ./scripts/final_verification.sh
+
+# Run system tests
+./scripts/test_alerts.sh
+
+# Validate alert rules
+./scripts/validate_alerts.sh
 
 # Generate CPU load for testing
 ./scripts/generate_load.sh
@@ -234,6 +285,7 @@ Department: DevOps
 📅 Version History
 Version	Date	Changes
 1.0	September 2026	Initial release
+1.1	September 2026	Added validation, testing, rollback and CI/CD integration
 🎉 Conclusion
 Successfully completed Prometheus Log Audit with 70% alert volume reduction and 55% false positive reduction!
 
@@ -247,4 +299,3 @@ text
 │   False Positives:  55% Reduction                           │
 │   Documentation:    ✅ Complete                             │
 └─────────────────────────────────────────────────────────────┘
-End of README

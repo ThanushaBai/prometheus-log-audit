@@ -1,6 +1,7 @@
 #!/bin/bash
 # Generate CPU Load for Testing
 # Simulates high CPU usage to test alert triggering
+# Created by: Thanusha Bai V, DevOps
 
 echo "=========================================="
 echo "  GENERATING CPU LOAD"

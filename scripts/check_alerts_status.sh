@@ -1,6 +1,7 @@
 #!/bin/bash
 # Check Active Alerts Status
 # Monitors currently firing alerts
+# Created by: Thanusha Bai V, DevOps
 
 echo "=========================================="
 echo "  ACTIVE ALERTS STATUS"

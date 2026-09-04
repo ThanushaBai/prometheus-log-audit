@@ -1,6 +1,7 @@
 #!/bin/bash
 # Final Verification Script
 # Verifies all system components are working correctly
+# Created by: Thanusha Bai V, DevOps
 
 echo "=========================================="
 echo "  FINAL VERIFICATION - ALL COMPONENTS"
@@ -41,6 +42,11 @@ try:
         print('  ✅ No active alerts - System is healthy!')
     else:
         print(f'  ⚠️ {len(alerts)} active alert(s)')
+        for alert in alerts:
+            labels = alert.get('labels', {})
+            state = alert.get('state', 'unknown')
+            name = labels.get('alertname', 'unknown')
+            print(f'    {name}: {state}')
 except:
     print('  ⚠️ Could not fetch alerts')"
 

@@ -4,7 +4,6 @@
 # Created by: Thanusha Bai V, DevOps
 
 LOG_FILE="/tmp/prometheus_3month_audit.log"
-AUDIT_SCRIPT="/tmp/generate_audit_logs.py"
 
 echo "=========================================="
 echo "  PROMETHEUS LOG AUDIT - FULL ANALYSIS"
@@ -12,16 +11,9 @@ echo "  $(date)"
 echo "=========================================="
 echo ""
 
-# Check if audit data exists, if not generate it
+# Generate audit data if not exists
 if [ ! -f "$LOG_FILE" ]; then
     echo "📊 Generating audit log data..."
-    
-    # Check if Python script exists, if not create it
-    if [ ! -f "scripts/generate_audit_logs.py" ]; then
-        echo "❌ Error: scripts/generate_audit_logs.py not found!"
-        exit 1
-    fi
-    
     python3 scripts/generate_audit_logs.py
     echo ""
 fi

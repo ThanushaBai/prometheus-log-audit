@@ -1,86 +1,99 @@
-# SYSTEM ALERTS - Active Production Rules
-# Currently active alert rules in Prometheus
+# TUNED ALERTS (After Tuning) - OPTIMIZED
+# These alerts have been tuned to reduce noise and false positives
+# RECOMMENDED FOR PRODUCTION USE
 # Created by: Thanusha Bai V, DevOps
 
 groups:
-  - name: system_alerts
+  - name: tuned_alerts
     interval: 30s
     rules:
       
       # TUNED: High CPU - Reduced noise
-      - alert: HighCPUUsage
+      - alert: HighCPUUsage_Tuned
         expr: (100 - (avg(rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)) > 85
-        for: 10m
+        for: 10m  # INCREASED from 2m to reduce false positives
         labels:
-          severity: warning
+          severity: warning  # DOWNGRADED from critical
           tuned: "true"
+          version: "v2.0"
         annotations:
-          summary: "High CPU usage detected"
+          summary: "High CPU usage detected (TUNED)"
           description: "CPU usage is at {{ $value }}% for more than 10 minutes"
           action: "Check top processes: 'top -o %CPU'"
+          improvement: "Duration increased from 2m to 10m, threshold from 80% to 85%"
 
       # TUNED: High Memory - Increased threshold
-      - alert: HighMemoryUsage
+      - alert: HighMemoryUsage_Tuned
         expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 90
-        for: 10m
+        for: 10m  # INCREASED from 3m
         labels:
-          severity: warning
+          severity: warning  # DOWNGRADED from critical
           tuned: "true"
+          version: "v2.0"
         annotations:
-          summary: "High memory usage detected"
+          summary: "High memory usage detected (TUNED)"
           description: "Memory usage is at {{ $value }}% for more than 10 minutes"
           action: "Check memory usage: 'free -h'"
+          improvement: "Duration increased from 3m to 10m, threshold from 85% to 90%"
 
       # TUNED: Disk Space - Added flapping prevention
-      - alert: HighDiskUsage
+      - alert: HighDiskUsage_Tuned
         expr: (node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}) * 100 < 10
-        for: 15m
+        for: 15m  # INCREASED from 1m to prevent flapping
         labels:
           severity: warning
           tuned: "true"
+          version: "v2.0"
         annotations:
-          summary: "Low disk space"
+          summary: "Low disk space (TUNED)"
           description: "Only {{ $value }}% disk space remaining for 15+ minutes"
           action: "Check disk usage: 'df -h'"
+          improvement: "Duration increased from 1m to 15m, threshold from 15% to 10%"
 
       # TUNED: Load Average - Dynamic threshold
-      - alert: HighLoadAverage
+      - alert: HighLoadAverage_Tuned
         expr: node_load15 > (2 * count(node_cpu_seconds_total{mode="idle"}))
-        for: 10m
+        for: 10m  # INCREASED from 1m
         labels:
           severity: warning
           tuned: "true"
+          version: "v2.0"
         annotations:
-          summary: "High load average"
+          summary: "High load average (TUNED)"
           description: "Load average is {{ $value }} (threshold based on CPU cores)"
           action: "Check system load: 'uptime'"
+          improvement: "Changed from static 2 to dynamic based on CPU cores"
 
       # TUNED: Swap Usage - Added flapping prevention
-      - alert: SwapUsageHigh
+      - alert: SwapUsageHigh_Tuned
         expr: (node_memory_SwapTotal_bytes - node_memory_SwapFree_bytes) / node_memory_SwapTotal_bytes * 100 > 60
-        for: 10m
+        for: 10m  # INCREASED from 30s
         labels:
           severity: warning
           tuned: "true"
+          version: "v2.0"
         annotations:
-          summary: "High swap usage"
+          summary: "High swap usage (TUNED)"
           description: "Swap usage is {{ $value }}% for more than 10 minutes"
           action: "Check memory pressure: 'vmstat 1 5'"
+          improvement: "Duration increased from 30s to 10m, threshold from 50% to 60%"
 
       # TUNED: Service Down - Kept critical
-      - alert: ServiceDown
+      - alert: ServiceDown_Tuned
         expr: up{job="prometheus"} == 0
-        for: 2m
+        for: 2m  # Slightly increased from 1m
         labels:
-          severity: critical
+          severity: critical  # KEPT critical for real issues
           tuned: "true"
+          version: "v2.0"
         annotations:
-          summary: "Service is DOWN"
+          summary: "Service is DOWN (TUNED - CRITICAL)"
           description: "{{ $labels.job }} service has been down for 2 minutes"
           action: "Immediately check the service: 'sudo systemctl status {{ $labels.job }}'"
+          improvement: "Duration increased from 1m to 2m for critical alerts"
 
       # NEW: Combined Alert
-      - alert: SystemHealthCheck
+      - alert: SystemHealthCheck_Tuned
         expr: |
           (100 - (avg(rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)) > 80
           or
@@ -89,7 +102,9 @@ groups:
         labels:
           severity: warning
           tuned: "true"
+          version: "v2.0"
         annotations:
-          summary: "System health check - multiple issues"
+          summary: "System health check - multiple issues (TUNED)"
           description: "System is experiencing high resource usage"
           action: "Check dashboard for detailed metrics"
+          improvement: "NEW ALERT - Combines CPU and Memory conditions"

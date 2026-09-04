@@ -1,6 +1,7 @@
 #!/bin/bash
 # Quick Alert Dashboard
 # Shows real-time alert status
+# Created by: Thanusha Bai V, DevOps
 
 echo "=========================================="
 echo "  ALERT DASHBOARD - $(date +"%Y-%m-%d %H:%M:%S")"

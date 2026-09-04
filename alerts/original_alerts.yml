@@ -1,0 +1,75 @@
+# ORIGINAL ALERTS (Before Tuning) - NOISY
+# These alerts fired frequently and caused alert fatigue
+# DO NOT USE IN PRODUCTION - For reference only
+# Created by: Thanusha Bai V, DevOps
+
+groups:
+  - name: original_alerts
+    interval: 30s
+    rules:
+      
+      # ORIGINAL: High CPU - Noisy
+      - alert: HighCPUUsage_Original
+        expr: (100 - (avg(rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)) > 80
+        for: 2m  # Too short - causes false positives
+        labels:
+          severity: critical  # Too severe for non-critical issues
+        annotations:
+          summary: "High CPU usage detected (ORIGINAL - NOISY)"
+          description: "CPU usage is at {{ $value }}% for 2 minutes"
+          note: "THIS IS THE ORIGINAL NOISY ALERT - DO NOT USE"
+
+      # ORIGINAL: High Memory - Noisy
+      - alert: HighMemoryUsage_Original
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 85
+        for: 3m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High memory usage detected (ORIGINAL - NOISY)"
+          description: "Memory usage is at {{ $value }}% for 3 minutes"
+          note: "THIS IS THE ORIGINAL NOISY ALERT - DO NOT USE"
+
+      # ORIGINAL: High Disk - Flapping
+      - alert: HighDiskUsage_Original
+        expr: (node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}) * 100 < 15
+        for: 1m  # Too short - causes flapping
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low disk space (ORIGINAL - FLAPPING)"
+          description: "Only {{ $value }}% disk space remaining"
+          note: "THIS ALERT FLAPS - DO NOT USE"
+
+      # ORIGINAL: Load Average - Static threshold
+      - alert: HighLoadAverage_Original
+        expr: node_load15 > 2
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High load average (ORIGINAL - STATIC)"
+          description: "Load average is {{ $value }}"
+          note: "STATIC THRESHOLD DOESN'T ADAPT TO CPU CORES"
+
+      # ORIGINAL: Swap Usage - Rapid flapping
+      - alert: SwapUsageHigh_Original
+        expr: (node_memory_SwapTotal_bytes - node_memory_SwapFree_bytes) / node_memory_SwapTotal_bytes * 100 > 50
+        for: 30s  # Extremely short - causes rapid flapping
+        labels:
+          severity: warning
+        annotations:
+          summary: "High swap usage (ORIGINAL - RAPID FLAPPING)"
+          description: "Swap usage is {{ $value }}%"
+          note: "RAPID FLAPPING ALERT - DO NOT USE"
+
+      # ORIGINAL: Service Down - Kept as reference
+      - alert: ServiceDown_Original
+        expr: up{job="prometheus"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Service is DOWN (ORIGINAL)"
+          description: "{{ $labels.job }} service is down"
+          note: "KEPT AS REFERENCE FOR CRITICAL ALERTS"

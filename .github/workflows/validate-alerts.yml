@@ -1,0 +1,49 @@
+name: Prometheus Alert Validation
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install Prometheus
+      run: |
+        wget https://github.com/prometheus/prometheus/releases/download/v2.45.0/prometheus-2.45.0.linux-amd64.tar.gz
+        tar -xzf prometheus-2.45.0.linux-amd64.tar.gz
+        sudo mv prometheus-2.45.0.linux-amd64/promtool /usr/local/bin/
+
+    - name: Validate Original Alerts
+      run: |
+        echo "🔍 Validating original alert rules..."
+        promtool check rules alerts/original_alerts.yml
+
+    - name: Validate Tuned Alerts
+      run: |
+        echo "🔍 Validating tuned alert rules..."
+        promtool check rules alerts/tuned_alerts.yml
+
+    - name: Compare Alert Rules
+      run: |
+        echo "📊 Comparing original vs tuned alerts..."
+        echo "=========================================="
+        echo "DIFFERENCES BETWEEN ORIGINAL AND TUNED ALERTS"
+        echo "=========================================="
+        diff -u alerts/original_alerts.yml alerts/tuned_alerts.yml || true
+
+    - name: Validation Summary
+      run: |
+        echo "=========================================="
+        echo "  VALIDATION COMPLETE"
+        echo "=========================================="
+        echo "✅ Original alerts validated"
+        echo "✅ Tuned alerts validated"
+        echo "✅ Differences identified"
+        echo "=========================================="
