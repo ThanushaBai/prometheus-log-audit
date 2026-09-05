@@ -141,6 +141,68 @@ This project provides a comprehensive audit of Prometheus alerting logs over a 3
 | ![Tuned Alerts Content](screenshots/tuned_alerts_content.png) | **Tuned Alerts** - Optimized alerts after tuning |
 | ![Alert Comparison](screenshots/alert_comparison.png) | **Alert Comparison** - Original vs Tuned |
 
+**Original Alerts (Before Tuning):**
+
+```yaml
+# ORIGINAL ALERTS (Before Tuning) - NOISY
+# These alerts fired frequently and caused alert fatigue
+# DO NOT USE IN PRODUCTION - For reference only
+
+groups:
+  - name: original_alerts
+    interval: 30s
+    rules:
+      
+      # ORIGINAL: High CPU - Noisy
+      - alert: HighCPUUsage_Original
+        expr: (100 - (avg(rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)) > 80
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High CPU usage (ORIGINAL - NOISY)"
+          description: "CPU usage is at {{ $value }}% for 2 minutes"
+          note: "THIS IS THE ORIGINAL NOISY ALERT - DO NOT USE"
+
+      # ORIGINAL: High Memory - Noisy
+      - alert: HighMemoryUsage_Original
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 85
+        for: 3m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High memory usage (ORIGINAL - NOISY)"
+          description: "Memory usage is at {{ $value }}% for 3 minutes"
+          note: "THIS IS THE ORIGINAL NOISY ALERT - DO NOT USE"
+```
+
+**Tuned Alerts (After Tuning):**
+
+```yaml
+# TUNED ALERTS (After Tuning) - OPTIMIZED
+# These alerts have been tuned to reduce noise and false positives
+# RECOMMENDED FOR PRODUCTION USE
+
+groups:
+  - name: tuned_alerts
+    interval: 30s
+    rules:
+      
+      # TUNED: High CPU - Reduced noise
+      - alert: HighCPUUsage_Tuned
+        expr: (100 - (avg(rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)) > 85
+        for: 10m
+        labels:
+          severity: warning
+          tuned: "true"
+          version: "v2.0"
+        annotations:
+          summary: "High CPU usage detected (TUNED)"
+          description: "CPU usage is at {{ $value }}% for more than 10 minutes"
+          action: "Check top processes: 'top -o %CPU'"
+          improvement: "Duration increased from 2m to 10m, threshold from 80% to 85%"
+```
+
 ---
 
 #### Rollback & CI/CD
