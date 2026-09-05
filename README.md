@@ -174,11 +174,9 @@ groups:
           summary: "High memory usage (ORIGINAL - NOISY)"
           description: "Memory usage is at {{ $value }}% for 3 minutes"
           note: "THIS IS THE ORIGINAL NOISY ALERT - DO NOT USE"
-```
+Tuned Alerts (After Tuning):
 
-**Tuned Alerts (After Tuning):**
-
-```yaml
+yaml
 # TUNED ALERTS (After Tuning) - OPTIMIZED
 # These alerts have been tuned to reduce noise and false positives
 # RECOMMENDED FOR PRODUCTION USE
@@ -201,106 +199,93 @@ groups:
           description: "CPU usage is at {{ $value }}% for more than 10 minutes"
           action: "Check top processes: 'top -o %CPU'"
           improvement: "Duration increased from 2m to 10m, threshold from 80% to 85%"
-```
-
----
-
-#### Rollback & CI/CD
-
-| Screenshot | Description |
-|------------|-------------|
-| ![Rollback Script](screenshots/rollback_script.png) | **Rollback Script** - Automated rollback execution |
-| ![GitHub Workflow](screenshots/github_workflow.png) | **GitHub Actions** - CI/CD workflow for alert validation |
-
----
-
-#### Reproducible Audit & Alert Tests (NEW)
-
-| Screenshot | Description |
-|------------|-------------|
-| ![Setup Repo 1](screenshots/setup_repo_01.png) | **Setup Script** - One-click reproducible audit setup |
-| ![Setup Repo 2](screenshots/setup_repo_02.png) | **Setup Script** - Continued |
-| ![Test Alert Triggers](screenshots/test_alert_triggers.png) | **Alert Rule Tests** - 10/10 alert tests passed |
-| ![Show Before After 1](screenshots/show_before_after_01.png) | **Before/After Results** - Clear comparison table |
-| ![Show Before After 2](screenshots/show_before_after_02.png) | **Before/After Results** - Continued |
-
----
-
-### 📁 Project Structure
-prometheus-log-audit/
-├── README.md # This file
-├── LICENSE # MIT License
-├── .gitignore # Git ignore file
-├── scripts/
-│ ├── run_full_audit.sh # Execute complete audit analysis
-│ ├── final_verification.sh # Verify all system components
-│ ├── alert_dashboard.sh # Quick alert status view
-│ ├── generate_load.sh # Generate CPU load for testing
-│ ├── generate_audit_logs.py # Generate 3-month simulated data
-│ ├── check_alerts_status.sh # Monitor active alerts
-│ ├── test_alerts.sh # Run comprehensive system tests
-│ ├── validate_alerts.sh # Validate alert rules with promtool
-│ ├── rollback_alerts.sh # Automated rollback to original alerts
-│ ├── setup_repo.sh # One-click reproducible audit setup
-│ ├── test_alert_triggers.sh # Alert rule tests (10 tests)
-│ └── show_before_after.sh # Clear before/after comparison
-├── .github/
-│ └── workflows/
-│ └── validate-alerts.yml # GitHub Actions CI/CD workflow
-├── screenshots/ # All screenshots captured
-│ ├── prometheus_status.png
-│ ├── node_exporter_status.png
-│ ├── prometheus_targets.png
-│ ├── alert_rules_config_01.png
-│ ├── alert_rules_config_02.png
-│ ├── alert_rules_api_01.png
-│ ├── alert_rules_api_02.png
-│ ├── prometheus_alerts_before.png
-│ ├── prometheus_alerts_after.png
-│ ├── audit_analysis.png
-│ ├── tuning_summary_01.png
-│ ├── tuning_summary_02.png
-│ ├── cpu_usage_01.png
-│ ├── cpu_usage_02.png
-│ ├── memory_usage.png
-│ ├── prometheus_config.png
-│ ├── node_exporter_metrics.png
-│ ├── ports_status.png
-│ ├── prometheus_graph.png
-│ ├── final_verification_01.png
-│ ├── final_verification_02.png
-│ ├── test_alerts_output.png
-│ ├── validate_alerts_output.png
-│ ├── alert_files_list.png
-│ ├── original_alerts_content.png
-│ ├── tuned_alerts_content.png
-│ ├── alert_comparison.png
-│ ├── rollback_script.png
-│ ├── github_workflow.png
-│ ├── setup_repo_01.png # NEW
-│ ├── setup_repo_02.png # NEW
-│ ├── test_alert_triggers.png # NEW
-│ ├── show_before_after_01.png # NEW
-│ └── show_before_after_02.png # NEW
-├── alerts/
-│ ├── original_alerts.yml # Original noisy alerts (reference)
-│ ├── tuned_alerts.yml # Tuned optimized alerts
-│ └── system_alerts.yml # Currently active in Prometheus
-├── docs/
-│ └── prometheus_log_audit.md # Complete project documentation
-└── reports/
-├── audit_report_final.txt # Complete audit findings
-└── tuning_summary.txt # Before/after comparison
-
+Rollback & CI/CD
+Screenshot	Description
+https://screenshots/rollback_script.png	Rollback Script - Automated rollback execution
+https://screenshots/github_workflow.png	GitHub Actions - CI/CD workflow for alert validation
+Reproducible Audit & Alert Tests
+Screenshot	Description
+https://screenshots/setup_repo_01.png	Setup Script - One-click reproducible audit setup
+https://screenshots/setup_repo_02.png	Setup Script - Continued
+https://screenshots/test_alert_triggers.png	Alert Rule Tests - 10/10 alert tests passed
+https://screenshots/show_before_after_01.png	Before/After Results - Clear comparison table
+https://screenshots/show_before_after_02.png	Before/After Results - Continued
+📁 Project Structure
 text
-
----
-
-### 🚀 Quick Start
-
-```bash
+prometheus-log-audit/
+├── README.md                              # Project overview and documentation
+├── LICENSE                                # MIT License
+├── .gitignore                             # Git ignore file
+│
+├── scripts/                               # All automation scripts
+│   ├── alert_dashboard.sh                 # Quick alert status view
+│   ├── check_alerts_status.sh             # Monitor active alerts
+│   ├── final_verification.sh              # Verify all system components
+│   ├── generate_audit_logs.py             # Generate 3-month simulated data
+│   ├── generate_load.sh                   # Generate CPU load for testing
+│   ├── rollback_alerts.sh                 # Automated rollback to original alerts
+│   ├── run_full_audit.sh                  # Execute complete audit analysis
+│   ├── setup_repo.sh                      # One-click reproducible audit setup
+│   ├── show_before_after.sh               # Clear before/after comparison
+│   ├── test_alerts.sh                     # Run comprehensive system tests (7 tests)
+│   ├── test_alert_triggers.sh             # Alert rule tests (10 tests)
+│   └── validate_alerts.sh                 # Validate alert rules with promtool
+│
+├── .github/                               # GitHub Actions CI/CD
+│   └── workflows/
+│       └── validate-alerts.yml            # Automated alert validation workflow
+│
+├── alerts/                                # Alert rule definitions
+│   ├── original_alerts.yml                # Original noisy alerts (reference only)
+│   ├── system_alerts.yml                  # Currently active in Prometheus
+│   └── tuned_alerts.yml                   # Tuned optimized alerts (production)
+│
+├── screenshots/                           # All screenshots (33 total)
+│   ├── alert_comparison.png
+│   ├── alert_files_list.png
+│   ├── alert_rules_api_01.png
+│   ├── alert_rules_api_02.png
+│   ├── alert_rules_config_01.png
+│   ├── alert_rules_config_02.png
+│   ├── audit_analysis.png
+│   ├── cpu_usage_01.png
+│   ├── cpu_usage_02.png
+│   ├── final_verification_01.png
+│   ├── final_verification_02.png
+│   ├── github_workflow.png
+│   ├── memory_usage.png
+│   ├── node_exporter_metrics.png
+│   ├── node_exporter_status.png
+│   ├── original_alerts_content.png
+│   ├── ports_status.png
+│   ├── prometheus_alerts_after.png
+│   ├── prometheus_alerts_before.png
+│   ├── prometheus_config.png
+│   ├── prometheus_graph.png
+│   ├── prometheus_status.png
+│   ├── prometheus_targets.png
+│   ├── rollback_script.png
+│   ├── setup_repo_01.png
+│   ├── setup_repo_02.png
+│   ├── show_before_after_01.png
+│   ├── show_before_after_02.png
+│   ├── test_alerts_output.png
+│   ├── test_alert_triggers.png
+│   ├── tuned_alerts_content.png
+│   ├── tuning_summary_01.png
+│   ├── tuning_summary_02.png
+│   └── validate_alerts_output.png
+│
+├── docs/                                  # Documentation
+│   └── prometheus_log_audit.md            # Complete project documentation
+│
+└── reports/                               # Audit reports
+    ├── audit_report_final.txt             # Complete audit findings
+    └── tuning_summary.txt                 # Before/after tuning comparison
+🚀 Quick Start
+bash
 # Clone the repository
-git clone https://github.com/your-username/prometheus-log-audit.git
+git clone https://github.com/ThanushaBai/prometheus-log-audit.git
 cd prometheus-log-audit
 
 # Make scripts executable
