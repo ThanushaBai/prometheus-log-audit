@@ -123,7 +123,7 @@ This project provides a comprehensive audit of Prometheus alerting logs over a 3
 
 ---
 
-#### Validation & Testing (NEW)
+#### Validation & Testing
 
 | Screenshot | Description |
 |------------|-------------|
@@ -132,7 +132,7 @@ This project provides a comprehensive audit of Prometheus alerting logs over a 3
 
 ---
 
-#### Original vs Tuned Alerts (NEW)
+#### Original vs Tuned Alerts
 
 | Screenshot | Description |
 |------------|-------------|
@@ -143,12 +143,24 @@ This project provides a comprehensive audit of Prometheus alerting logs over a 3
 
 ---
 
-#### Rollback & CI/CD (NEW)
+#### Rollback & CI/CD
 
 | Screenshot | Description |
 |------------|-------------|
 | ![Rollback Script](screenshots/rollback_script.png) | **Rollback Script** - Automated rollback execution |
 | ![GitHub Workflow](screenshots/github_workflow.png) | **GitHub Actions** - CI/CD workflow for alert validation |
+
+---
+
+#### Reproducible Audit & Alert Tests (NEW)
+
+| Screenshot | Description |
+|------------|-------------|
+| ![Setup Repo 1](screenshots/setup_repo_01.png) | **Setup Script** - One-click reproducible audit setup |
+| ![Setup Repo 2](screenshots/setup_repo_02.png) | **Setup Script** - Continued |
+| ![Test Alert Triggers](screenshots/test_alert_triggers.png) | **Alert Rule Tests** - 10/10 alert tests passed |
+| ![Show Before After 1](screenshots/show_before_after_01.png) | **Before/After Results** - Clear comparison table |
+| ![Show Before After 2](screenshots/show_before_after_02.png) | **Before/After Results** - Continued |
 
 ---
 
@@ -166,7 +178,10 @@ prometheus-log-audit/
 │ ├── check_alerts_status.sh # Monitor active alerts
 │ ├── test_alerts.sh # Run comprehensive system tests
 │ ├── validate_alerts.sh # Validate alert rules with promtool
-│ └── rollback_alerts.sh # Automated rollback to original alerts
+│ ├── rollback_alerts.sh # Automated rollback to original alerts
+│ ├── setup_repo.sh # One-click reproducible audit setup
+│ ├── test_alert_triggers.sh # Alert rule tests (10 tests)
+│ └── show_before_after.sh # Clear before/after comparison
 ├── .github/
 │ └── workflows/
 │ └── validate-alerts.yml # GitHub Actions CI/CD workflow
@@ -192,14 +207,19 @@ prometheus-log-audit/
 │ ├── prometheus_graph.png
 │ ├── final_verification_01.png
 │ ├── final_verification_02.png
-│ ├── test_alerts_output.png # NEW
-│ ├── validate_alerts_output.png # NEW
-│ ├── alert_files_list.png # NEW
-│ ├── original_alerts_content.png # NEW
-│ ├── tuned_alerts_content.png # NEW
-│ ├── alert_comparison.png # NEW
-│ ├── rollback_script.png # NEW
-│ └── github_workflow.png # NEW
+│ ├── test_alerts_output.png
+│ ├── validate_alerts_output.png
+│ ├── alert_files_list.png
+│ ├── original_alerts_content.png
+│ ├── tuned_alerts_content.png
+│ ├── alert_comparison.png
+│ ├── rollback_script.png
+│ ├── github_workflow.png
+│ ├── setup_repo_01.png # NEW
+│ ├── setup_repo_02.png # NEW
+│ ├── test_alert_triggers.png # NEW
+│ ├── show_before_after_01.png # NEW
+│ └── show_before_after_02.png # NEW
 ├── alerts/
 │ ├── original_alerts.yml # Original noisy alerts (reference)
 │ ├── tuned_alerts.yml # Tuned optimized alerts
@@ -224,20 +244,20 @@ cd prometheus-log-audit
 # Make scripts executable
 chmod +x scripts/*.sh
 
+# One-click reproducible setup
+./scripts/setup_repo.sh
+
 # Run audit analysis
 ./scripts/run_full_audit.sh
 
+# Run alert rule tests
+./scripts/test_alert_triggers.sh
+
+# Show before/after comparison
+./scripts/show_before_after.sh
+
 # Check system status
 ./scripts/final_verification.sh
-
-# Run system tests
-./scripts/test_alerts.sh
-
-# Validate alert rules
-./scripts/validate_alerts.sh
-
-# Generate CPU load for testing
-./scripts/generate_load.sh
 
 # Check active alerts
 ./scripts/alert_dashboard.sh
@@ -286,6 +306,7 @@ Department: DevOps
 Version	Date	Changes
 1.0	September 2026	Initial release
 1.1	September 2026	Added validation, testing, rollback and CI/CD integration
+1.2	September 2026	Added reproducible setup, alert tests, before/after comparison
 🎉 Conclusion
 Successfully completed Prometheus Log Audit with 70% alert volume reduction and 55% false positive reduction!
 
